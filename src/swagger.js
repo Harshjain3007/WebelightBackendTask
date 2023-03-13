@@ -90,13 +90,10 @@ const swaggerOptions={
                  }
                 }  ,
                 product:{
-                  type:'Object',
-                  require:['name','description','category', 'price'],
+                  type:Object,
+                  required:['name','description','category', 'price'],
                   properties:{
-                    _id: {
-                        type: "string",
-                        format: "objectId"
-                      },
+                   
                     name:{
                         type:'String',
                         description:'This is the name of the product'
@@ -108,20 +105,20 @@ const swaggerOptions={
                      category:{
                        type:'String',
                        enum:['Bakery','Handloom','Footware','Dairy'],
-                       description:'The category should be under there 4 types'
+                       description:'The category should be under these 4 types'
                     },
                     price:{
-                        type:'Number',
+                        type:Number,
                         description:'This is the price of the product'
                     },
                     example:{
-                        name:'New AllenSolly mens Jacket',
+                        name:'New AllenSolly meacket',
                         description:'Best jacket in market',
                         category:'Handloom',
                         price:400
                     }
                  
-                  }
+                }
 
                 }  
           },
@@ -169,6 +166,18 @@ const swaggerOptions={
             post:{
                 tags:['user'],
                 description:'new user can login',
+                requestBody: {
+                    content: {
+                      // content-type
+                      "application/json": {
+                        Schema: {
+                            $ref: "#/components/schemas/user",
+                        },
+                      },
+                    },
+                  },
+
+
                 responses:{
                     200:{ description:"user logged in  successfully",contents:{'application/json':{}}},
                     400:{description:'BAD request',contents:{"application/json":{}}},
@@ -180,7 +189,7 @@ const swaggerOptions={
            '/getusers/:adminId':{
             get:{
                 tags:['user'],
-                description:'new user can login',
+                description:'get list of all users',
                 responses:{
                     200:{ description:"Ok",contents:{'application/json':{}}},
                      400:{description:'Bad request',contents:{"application/json":{}}},
@@ -194,6 +203,9 @@ const swaggerOptions={
                 get:{
                     tags:['user'],
                     description:'new user can login',
+
+
+
                     responses:{
                         200:{ description:"Ok",contents:{'application/json':{}}},
                          400:{description:'Bad request',contents:{"application/json":{}}},
@@ -207,6 +219,16 @@ const swaggerOptions={
              post:{
                 tags:['admin'],
                 description:'creation of a new admin',
+                requestBody: {
+                    content: {
+                      // content-type
+                      "application/json": {
+                        schema: {
+                          $ref: "#/components/schemas/admin", 
+                        },
+                      },
+                    },
+                  },
                 responses:{
                     201:{ description:"new user created successfully",contents:{'application/json':{}}},
                     400:{description:'BAD request',contents:{"application/json":{}}},
@@ -229,6 +251,16 @@ const swaggerOptions={
             post:{
                 tags:['product'],
                 description:'creation of a new product',
+                requestBody: {
+                    content: {
+                      // content-type
+                      "application/json": {
+                        schema: {
+                            $ref: "#/components/schemas/product", 
+                          },
+                      },
+                    },
+                  },
                 responses:{
                     201:{ description:"new product created successfully",contents:{'application/json':{}}},
                     400:{description:'BAD request',contents:{"application/json":{}}},
@@ -294,6 +326,18 @@ const swaggerOptions={
             delete:{
                 tags:['product'],
                 description:'delete the product by its id',
+                parameters: [
+                    // expected parameters
+                    {
+                      name: "id", // name of param
+                      in: "path", // location of param
+                      schema: {
+                        $ref: "#/components/schemas/product", // id model
+                      },
+                      required: true, // mandatory
+                      description: "Deleting a product from database", // param desc
+                    },
+                  ],
                 responses:{
                     200:{ description:"Ok",contents:{'application/json':{}}},
                     401:{description:'not authenticated',contents:{"application/json":{}}},
