@@ -9,10 +9,9 @@ const route=require('./routes/route')
 const app=express()
 
 app.use(express.json())
-
-
 const swaggerDocs = swaggerJsdoc(options)
-console.log(swaggerDocs);
+
+
 app.use('/api-docs',swaggerUI.serve,swaggerUI.setup(swaggerDocs))
 
 mongoose.set('strictQuery', true)

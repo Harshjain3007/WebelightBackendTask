@@ -29,7 +29,7 @@ const loginUser = async function(req,res){
     if (Object.keys(data).length == 0) return res.status(400).send({ status: false, message: "Please Enter the credentials" })
 
     let findUser= await usermodel.findOne({email:email,password:password})
-    if(!findUser) return res.status(401).send({status:false,message:'Incorrect credentials'})
+    if(!findUser) return res.status(401).send({status:false,message:'please enter correct credentials'})
     const token=jwt.sign({
          user_Id:findUser._id.toString(),
         eamil_id:findUser.email
@@ -46,6 +46,10 @@ const getListofUsers= async function(req,res){
 
 const getUserbyId = async function(req,res){
     let userId = req.params.userId
+    const isValidObjectId = mongoose.Types.ObjectId.isValid(userId);
+    if (!isValidObjectId) {
+      return res.status(400).send({ status: false, message: 'Invalid product ID' });
+    }
     let findUserId = await usermodel.findById(userId)
     if(!findUserId) return res.status(404).send({status:false,message:'user does not exist'})
     return res.status(200).send({status:true,data:findUserId})

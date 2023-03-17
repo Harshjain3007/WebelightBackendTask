@@ -1,4 +1,5 @@
 const { application } = require("express")
+const mongoose=require('mongoose')
 
 const swaggerOptions={
     swaggerDefinition:{
@@ -49,6 +50,7 @@ const swaggerOptions={
                     password:'as12@gmail.com'
                  }
         },
+
         admin:{
             type:Object,
             required:[ 'fname', 'lname', 'phone','email','password'],
@@ -104,21 +106,22 @@ const swaggerOptions={
                     },
                      category:{
                        type:'String',
-                       enum:['Bakery','Handloom','Footware','Dairy'],
+                       enum:['Handloom','Bakery','Footware','Dairy'],
                        description:'The category should be under these 4 types'
                     },
                     price:{
                         type:Number,
                         description:'This is the price of the product'
                     },
+                  },
                     example:{
-                        name:'New AllenSolly meacket',
-                        description:'Best jacket in market',
-                        category:'Handloom',
-                        price:400
+                      name:'New AllenSolly mensJacket',
+                      description:'Best Jacket in market',
+                      category:'Handloom',
+                      price:500
                     }
                  
-                }
+                
 
                 }  
           },
@@ -170,10 +173,27 @@ const swaggerOptions={
                     content: {
                       // content-type
                       "application/json": {
-                        Schema: {
-                            $ref: "#/components/schemas/user",
-                        },
+                       
+                        schema:{
+                          type:Object,
+                          properties:{
+                            required:['email','password'],
+                             email:{
+                              type:'string'
+                             },
+                             password:{
+                              type:'string'
+                             }
+                          },
+                          example:{
+                            email:'abc@gmail.com',
+                            password:'axc@123'
+                          }
+                        }
+                       
                       },
+                
+                     
                     },
                   },
 
@@ -239,7 +259,36 @@ const swaggerOptions={
            '/loginadmin':{
             post:{
                 tags:['admin'],
-                description:'creation of a new admin',
+                description:'admin credentials for login',
+                requestBody: {
+                  content: {
+                    // content-type
+                    "application/json": {
+                     
+                      schema:{
+                        type:Object,
+                        properties:{
+                          required:['email','password'],
+                           email:{
+                            type:'string'
+                           },
+                           password:{
+                            type:'string'
+                           }
+                        },
+                        example:{
+                          email:'bbc@gmail.com',
+                          password:'aac@123'
+                        }
+                      }
+                     
+                    },
+              
+                   
+                  },
+                },
+                 
+
                 responses:{
                     200:{ description:"admin logged in  successfully",contents:{'application/json':{}}},
                     400:{description:'BAD request',contents:{"application/json":{}}},
@@ -247,10 +296,22 @@ const swaggerOptions={
                 },
              }
            },
-           '/createproduct/:adminId':{
+           '/createproduct/{adminId}':{
             post:{
                 tags:['product'],
-                description:'creation of a new product',
+                description:'creation of a new product by admin',
+                operationId:'createProduct',
+               
+                parameters:[
+                  {
+                    name: "adminId", 
+                    in: "path",
+                    schema:{
+                      type:"string",
+                      required:true
+                    }
+                  }
+                ],
                 requestBody: {
                     content: {
                       // content-type
@@ -261,6 +322,7 @@ const swaggerOptions={
                       },
                     },
                   },
+                
                 responses:{
                     201:{ description:"new product created successfully",contents:{'application/json':{}}},
                     400:{description:'BAD request',contents:{"application/json":{}}},
@@ -271,7 +333,7 @@ const swaggerOptions={
 
              }
            },
-           '/product/:productId':{
+           '/product/{productId}':{
             get:{
                 tags:['product'],
                 description:'get a product by its ID',
@@ -279,13 +341,18 @@ const swaggerOptions={
                 parameters: [
                     
                     {
-                      name: "id", 
+                      name: "productId", 
                       in: "path", 
                       schema: {
-                        $ref: "#/components/schemas/product", // data model of the param
+                       // $ref: "#/components/schemas/product", // data model of the param
+
+                        type:"string",
+                        
+                        required: true, 
+                       
                       },
-                      required: true, 
-                      description: "A single product", 
+                      
+                      description: "The Id  of the product to retrieve", 
                     },
                   ],
 

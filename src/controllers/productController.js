@@ -20,6 +20,10 @@ const createProduct = async function(req,res){
 const getProductsById = async function(req,res){
     try{
     let productId = req.params.productId
+    const isValidObjectId = mongoose.Types.ObjectId.isValid(productId);
+    if (!isValidObjectId) {
+      return res.status(400).send({ status: false, message: 'Invalid product ID' });
+    }
     let findProduct = await productmodel.findOne({_id:productId,isDeleted:false})
     if(!findProduct) 
     return res.status(404).send({status:false, message:"no product exist or may be deleted "})
@@ -59,6 +63,10 @@ const getProductsdetails = async function(req,res){
 const updateProductDetails = async function(req,res){
     try{
     const productId=req.params.productId 
+    const isValidObjectId = mongoose.Types.ObjectId.isValid(productId);
+    if (!isValidObjectId) {
+      return res.status(400).send({ status: false, message: 'Invalid product ID' });
+    }
 
      let updateProductDetails = req.body
     let {name,description,category,price} = updateProductDetails

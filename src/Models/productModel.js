@@ -1,26 +1,25 @@
 const mongoose=require('mongoose')
 
 const productSchema= new mongoose.Schema({
-    "name":{
+    name:{
         type:String,
         required:true,
         unique:true
     },
-    'description':{
+    description:{
         type:String,
         required:true,
    },
-   'category':{
+  category:{
      type:String,
      enum:['Bakery','Handloom','Footware','Dairy'],
      required:true
     },
-   'price':{
+   price:{
     type:Number,
     required:true
    },
    
- 
   isDeleted:{
     type:Boolean,
     default:false,

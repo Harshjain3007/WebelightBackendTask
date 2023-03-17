@@ -17,6 +17,7 @@ const loginAdmin = async function(req,res){
     return res.status(400).send({ status: false, message: "Please Enter admin login credentials" })
 
     let findAdmin= await adminmodel.findOne({email:email,password:password})
+    if(!findAdmin) return res.status(401).send({status:false,message:'Please enter correct login credentials'})
     const token=jwt.sign({
          admin_Id:findAdmin._id.toString(),
         eamil_id:findAdmin.email
