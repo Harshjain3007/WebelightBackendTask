@@ -374,10 +374,23 @@ const swaggerOptions={
                 }
             }
            },
-           'updateproduct/:productId/:adminId':{
-            update:{
+           '/updateproduct/{productId}/{adminId}':{
+            put:{
                 tags:['product'],
-                description:'update the product by its id',
+                description:'update the particular product',
+                operationId:'updateproduct',
+                parameters:[
+                            // expected parameters
+                    {
+                      name: "id", // name of param
+                      in: "path", // location of param
+                      schema: {
+                        $ref: "#/components/schemas/product", // id model
+                      },
+                      required: true, // mandatory
+                      description: "updating a product from database", // param desc
+                    },
+                ],
                 responses:{
                     200:{ description:"Ok",contents:{'application/json':{}}},
                     400:{description:'BAD request',contents:{"application/json":{}}},
