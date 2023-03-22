@@ -15,7 +15,17 @@ const swaggerOptions={
             description:'Development server'
         }
     ],
-    components:{
+ 
+
+     components:{
+      securitySchemes:{
+        BearerAuth:{
+          type:'http',
+          scheme:'bearer',
+           bearerFormat: 'JWT'
+        }
+      },
+      
         schemas:{
             user:{
                  type:Object,
@@ -206,11 +216,29 @@ const swaggerOptions={
             }
 
            },
-           '/getusers/:adminId':{
+           '/getusers/{adminId}':{
             get:{
                 tags:['user'],
                 description:'get list of all users',
-                responses:{
+               security:{
+                    BearerAuth:{
+                      read:'user',
+                      write:'user'
+
+                    }
+               },
+                parameters:[
+                  {
+                    name: "adminId", 
+                    in: "path",
+                    
+                    schema:{
+                      type:"string",
+                      required:true
+                    }
+                  }
+                ],
+                  responses:{
                     200:{ description:"Ok",contents:{'application/json':{}}},
                      400:{description:'Bad request',contents:{"application/json":{}}},
                      401:{description:'not authenticated',contents:{"application/json":{}}},
@@ -219,11 +247,29 @@ const swaggerOptions={
                 },
             }
             },
-            'getuser/:userId/:adminId':{
+            'getuser/{userId}/{adminId}':{
                 get:{
                     tags:['user'],
                     description:'new user can login',
+                    parameters:[
+                      {
+                        name: "userId", 
+                        in: "path",
+                        schema:{
+                          type:"string",
+                          required:true
+                        }
+                      },
+                      {
+                        name: "adminId", 
+                        in: "path",
+                        schema:{
+                          type:"string",
+                          required:true
+                        }
+                      }
 
+                    ],
 
 
                     responses:{
@@ -382,13 +428,22 @@ const swaggerOptions={
                 parameters:[
                             // expected parameters
                     {
-                      name: "id", // name of param
+                      name: "productId", // name of param
                       in: "path", // location of param
                       schema: {
                         $ref: "#/components/schemas/product", // id model
                       },
                       required: true, // mandatory
                       description: "updating a product from database", // param desc
+                    },
+
+
+                    {
+                      name: "adminId", // name of param
+                      in: "path", // location of param
+                      
+                      required: true, // mandatory
+                      description: "only admin is authorized to update the product", // param desc
                     },
                 ],
                 responses:{
@@ -402,20 +457,27 @@ const swaggerOptions={
 
             }
            },
-           '/deleteproduct/:productId/:adminId':{
+           '/deleteproduct/{productId}/{adminId}':{
             delete:{
                 tags:['product'],
                 description:'delete the product by its id',
                 parameters: [
                     // expected parameters
                     {
-                      name: "id", // name of param
+                      name: "productId", // name of param
                       in: "path", // location of param
                       schema: {
                         $ref: "#/components/schemas/product", // id model
                       },
                       required: true, // mandatory
                       description: "Deleting a product from database", // param desc
+                    },
+                    {
+                      name: "adminId", // name of param
+                      in: "path", // location of param
+                      
+                      required: true, // mandatory
+                      description: "only admin is authorized to delete the product", // param desc
                     },
                   ],
                 responses:{
